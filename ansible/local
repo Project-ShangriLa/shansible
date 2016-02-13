@@ -1,0 +1,5 @@
+[test]
+dev-shangrila
+
+#[dbservers]
+#localhost
