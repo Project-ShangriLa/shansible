@@ -54,7 +54,7 @@ $ vagrant plugin install <プラグイン名>
 #### RSyncのインストール
 
 CygwinでRSyncをインストールしてください。  
-Cygwinを利用しない場合は、Chocolateyでのインストールがお奨めです。
+Cygwinを利用しない場合は、Chocolateyでのインストールがお奨めです。  
 Chocolateyをインストール後、以下のコマンドでインストールできます。
 
 ```
@@ -72,50 +72,51 @@ Chocolateyをインストール後、以下のコマンドでインストール�
 
 Vagrant 1.8.1時点でのエラー回避のため、インストールしたVagrantのファイルを編集します。
 
-1. helper.rb  
+##### 1. helper.rb  
   - ファイルの場所
 ```
 HashiCorp\Vagrant\embedded\gems\gems\vagrant-1.8.1\plugins\synced_folders\rsync\helper.rb
 ```
 
-  48行目のhostpathの設定処理を以下のように変更する。
-  ```rb
-  #hostpath = Vagrant::Util::Platform.cygwin_path(hostpath)
-  hostpath = "/cygdrive" + Vagrant::Util::Platform.cygwin_path(hostpath)
-  ```
+48行目のhostpathの設定処理を以下のように変更する。
+```rb
+#hostpath = Vagrant::Util::Platform.cygwin_path(hostpath)
+hostpath = "/cygdrive" + Vagrant::Util::Platform.cygwin_path(hostpath)
+```
 
-  77-79行目をコメントアウト
-  ```rb
-  rsh = [
-    "ssh -p #{ssh_info[:port]} " +
-    proxy_command +
-  #  "-o ControlMaster=auto " +
-  #  "-o ControlPath=#{controlpath} " +
-  #  "-o ControlPersist=10m " +
-    "-o StrictHostKeyChecking=no " +
-    "-o IdentitiesOnly=true " +
-    "-o UserKnownHostsFile=/dev/null",
-    ssh_info[:private_key_path].map { |p| "-i '#{p}'" },
-  ].flatten.join(" ")
-  ```
-2. guest.rb  
+77-79行目をコメントアウト
+```rb
+rsh = [
+  "ssh -p #{ssh_info[:port]} " +
+  proxy_command +
+#  "-o ControlMaster=auto " +
+#  "-o ControlPath=#{controlpath} " +
+#  "-o ControlPersist=10m " +
+  "-o StrictHostKeyChecking=no " +
+  "-o IdentitiesOnly=true " +
+  "-o UserKnownHostsFile=/dev/null",
+  ssh_info[:private_key_path].map { |p| "-i '#{p}'" },
+].flatten.join(" ")
+```
+
+##### 2. guest.rb  
   - ファイルの場所
 ```
 HashiCorp\Vagrant\embedded\gems\gems\vagrant-1.8.1\plugins\provisioners\ansible\config\guest.rb
 ```
 
-  41行目のremote_pathの設定処理を以下のようにを変更する。
+41行目のremote_pathの設定処理を以下のようにを変更する。
 
-  ```rb
-  #remote_path = Pathname.new(path).expand_path(@provisioning_path)
-  remote_path = File.expand_path(path, @provisioning_path)
+```rb
+#remote_path = Pathname.new(path).expand_path(@provisioning_path)
+remote_path = File.expand_path(path, @provisioning_path)
 
-  # Remove drive letter if running on a Windows host
-  remote_path = remote_path.gsub(/^[a-zA-Z]:/, "")
-  ```
+# Remove drive letter if running on a Windows host
+remote_path = remote_path.gsub(/^[a-zA-Z]:/, "")
+```
 
-  ※これは以下で修正済みのため、最新バージョンでは修正されている可能性があります。
-  - https://github.com/mitchellh/vagrant/commit/07f3d0b00dabc37281a01c6776eed22daeea7066
+※これは以下で修正済みのため、最新バージョンでは修正されている可能性があります。
+- https://github.com/mitchellh/vagrant/commit/07f3d0b00dabc37281a01c6776eed22daeea7066
 
 
 ## 実行手順
@@ -147,4 +148,4 @@ Vagrant以外から実行する場合は、実行環境にAnsible 1.9+ をイン
 ## TODO:構築されるリポジトリ
 
 - [sora-playframework-scala](https://github.com/Project-ShangriLa/sora-playframework-scala)
--
+- 
