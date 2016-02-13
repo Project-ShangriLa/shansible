@@ -34,6 +34,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.boot_timeout = 3600
 
+  config.ssh.forward_agent = true
+
   # set auto_update to false, if you do NOT want to check the correct
   # additions version when booting this machine
   # config.vbguest.auto_update = false

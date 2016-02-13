@@ -145,7 +145,10 @@ Vagrant以外から実行する場合は、実行環境にAnsible 1.9+ をイン
 
     ansible-playbook -i local local.yml
 
-## TODO:構築されるリポジトリ
+## 構築されるリポジトリ
 
 - [sora-playframework-scala](https://github.com/Project-ShangriLa/sora-playframework-scala)
-- 
+
+## 実行するDDL
+
+- [shangrila](https://github.com/Project-ShangriLa/shangrila)
