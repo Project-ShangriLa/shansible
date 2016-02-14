@@ -1,0 +1,13 @@
+- name: dwonload
+  get_url: url=https://github.com/git/git/archive/v{{ git_version }}.tar.gz dest={{ src_dir }}/git-{{ git_version }}.tar.gz
+
+- name: unarchive
+  unarchive: src={{ src_dir }}/git-{{ git_version }}.tar.gz dest={{ src_dir }}
+  register: result
+
+- name: install
+  changed_when: False
+  shell: |
+    cd {{ src_dir }}/git-{{ git_version }}
+    make prefix={{ git_install_path }} all
+    make prefix={{ git_install_path }} install

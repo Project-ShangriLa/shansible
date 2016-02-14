@@ -72,8 +72,10 @@ Chocolateyをインストール後、以下のコマンドでインストール�
 
 Vagrant 1.8.1時点でのエラー回避のため、インストールしたVagrantのファイルを編集します。
 
-##### 1. helper.rb  
-  - ファイルの場所
+##### 1. helper.rb
+
+- ファイルの場所
+
 ```
 HashiCorp\Vagrant\embedded\gems\gems\vagrant-1.8.1\plugins\synced_folders\rsync\helper.rb
 ```
@@ -85,6 +87,7 @@ hostpath = "/cygdrive" + Vagrant::Util::Platform.cygwin_path(hostpath)
 ```
 
 77-79行目をコメントアウト
+
 ```rb
 rsh = [
   "ssh -p #{ssh_info[:port]} " +
@@ -99,8 +102,10 @@ rsh = [
 ].flatten.join(" ")
 ```
 
-##### 2. guest.rb  
-  - ファイルの場所
+##### 2. guest.rb
+
+- ファイルの場所
+
 ```
 HashiCorp\Vagrant\embedded\gems\gems\vagrant-1.8.1\plugins\provisioners\ansible\config\guest.rb
 ```
@@ -139,11 +144,19 @@ ShangriLaの実行環境を構築する、AnsibleのPlaybookです。
 
 Vagrant以外から実行する場合は、実行環境にAnsible 1.9+ をインストールしてください。
 
+また、```/etc/ansible/ansible.cfg```のhost_key_checkingをアンコメントし、
+host_key_checkingをFalseに変更して、SSH時のknown_hostsチェックを無効にしてください。
+
+```
+host_key_checking = False
+```
+
+
 ## ローカル環境の構築手順
 
 開発環境のサーバに```shansible/ansible```をコピーし、当該ディレクトリ上で以下のコマンドを実行してください。
 
-    ansible-playbook -i local local.yml
+    ansible-playbook -i local local.yml -k
 
 ## 構築されるリポジトリ
 

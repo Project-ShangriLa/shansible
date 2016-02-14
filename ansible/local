@@ -1,5 +1,5 @@
-[test]
-dev-shangrila
+[centos]
+localhost
 
-#[dbservers]
-#localhost
+[dbservers]
+localhost

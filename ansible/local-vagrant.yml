@@ -1,5 +1,5 @@
 - name: CentOSへのミドルウェアインストール
-  hosts: centos
+  hosts: localhost
   become: yes
   gather_facts: no
   roles:

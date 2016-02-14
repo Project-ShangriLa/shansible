@@ -1,0 +1,14 @@
+# yum install
+- yum: name=curl-devel state=latest
+- yum: name=expat-devel state=latest
+- yum: name=gettext-devel state=latest
+- yum: name=openssl-devel state=latest
+- yum: name=zlib-devel state=latest
+- yum: name=perl-ExtUtils-MakeMaker state=latest
+
+- name: git install
+  vars:
+    src_dir: /usr/local/src
+    git_install_path: /usr/local
+    git_version: 2.7.1
+  include: git.yml
