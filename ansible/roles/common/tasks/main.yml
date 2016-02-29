@@ -1,11 +1,13 @@
-# yum install
-- yum: name=curl-devel state=latest
-- yum: name=expat-devel state=latest
-- yum: name=gettext-devel state=latest
-- yum: name=openssl-devel state=latest
-- yum: name=zlib-devel state=latest
-- yum: name=perl-ExtUtils-MakeMaker state=latest
-
+- name: yum install
+  yum: pkg={{ item }} state=latest
+  with_items:
+    - curl-devel
+    - expat-devel
+    - gettext-devel
+    - openssl-devel 
+    - zlib-devel
+    - perl-ExtUtils-MakeMaker
+ 
 - name: git install
   vars:
     src_dir: /usr/local/src

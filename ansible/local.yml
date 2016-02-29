@@ -5,12 +5,19 @@
   roles:
     - common
 
-#- name: deploy MySQL and configure the databases
-#  hosts: dbservers
-#  become: true
-#  become_user: vagrant
-#  roles:
-#    - mysql
+- name: deploy MySQL and configure the databases
+  hosts: dbservers
+  become: yes
+  vars:
+    src_dir: /usr/local/src
+  roles:
+    - mysql
+
+- name: sora deploy and start
+  hosts: sora
+  become: yes
+  roles:
+    - sora
 
 #- name: Copy the code from repository
 #  git: repo={{ repository }} dest=/home/vagrant/repo1 accept_hostkey=yes

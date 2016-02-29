@@ -1,0 +1,8 @@
+- name: dwonload
+  get_url: url=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm dest={{ src_dir }}/
+
+- name: localinstall
+  yum: name={{ src_dir }}/mysql57-community-release-el7-7.noarch.rpm state=present
+
+- name: install
+  yum: name=mysql-community-server state=present
