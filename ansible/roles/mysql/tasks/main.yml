@@ -1,4 +1,4 @@
-- name: dwonload
+- name: download
   get_url: url=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm dest={{ src_dir }}/
 
 - name: localinstall
@@ -6,3 +6,15 @@
 
 - name: install
   yum: name=mysql-community-server state=present
+
+- name: replace my.cnf
+  template: src=my.cnf.j2 dest=/etc/my.cnf mode=0644
+
+- name: start MySQL service
+  service: name=mysqld enabled=yes state=started
+
+- name: add MySQL work user
+  mysql_user: name=dbuser password=dbpassword1 host={{ item }} priv=*.*:ALL,GRANT state=present
+  with_items:
+    - "localhost"
+    - "%"
