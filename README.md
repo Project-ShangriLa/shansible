@@ -142,7 +142,7 @@ ShangriLaの実行環境を構築する、AnsibleのPlaybookです。
 
 ## 実行要求
 
-Vagrant以外から実行する場合は、実行環境にAnsible 1.9+ をインストールしてください。
+Vagrant以外から実行する場合は、実行環境にAnsible 2.0+ をインストールしてください。
 
 また、```/etc/ansible/ansible.cfg```のhost_key_checkingをアンコメントし、
 host_key_checkingをFalseに変更して、SSH時のknown_hostsチェックを無効にしてください。
@@ -157,6 +157,10 @@ host_key_checking = False
 開発環境のサーバに```shansible/ansible```をコピーし、当該ディレクトリ上で以下のコマンドを実行してください。
 
     ansible-playbook -i local local.yml
+
+※SSHのagent forwardingを使ってgit cloneしているので、予めssh-addで秘密鍵を登録しておいてください。
+vagrant sshしてからansible-playbookコマンドを叩きたい場合も、ホストOS側でssh-addの実行をお願いします。
+
 
 ## 構築されるリポジトリ
 

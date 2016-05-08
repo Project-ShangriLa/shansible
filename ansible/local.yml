@@ -4,6 +4,7 @@
   gather_facts: no
   roles:
     - common
+    - sbt
 
 - name: deploy MySQL and configure the databases
   hosts: dbservers
@@ -11,9 +12,14 @@
   roles:
     - mysql
 
+- name: apply ShangriLa DDL/DML
+  hosts: dbservers
+  become: no
+  roles:
+    - shangrila
+
 - name: sora deploy and start
   hosts: sora
-  become: yes
+  become: no
   roles:
-    - sbt
     - sora
