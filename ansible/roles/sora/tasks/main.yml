@@ -1,0 +1,2 @@
+- name: git clone sora-playframework-scala
+  git: repo=git@github.com:Project-ShangriLa/sora-playframework-scala.git dest=/home/vagrant/repositories/ accept_hostkey=yes

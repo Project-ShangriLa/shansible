@@ -1,0 +1,4 @@
+- name: git clone shangrila
+  git: repo=git@github.com:Project-ShangriLa/shangrila.git dest=/home/vagrant/repositories/ accept_hostkey=yes
+
+# あとはmysqlに接続してDDL実行

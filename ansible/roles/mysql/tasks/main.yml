@@ -13,8 +13,8 @@
 - name: start MySQL service
   service: name=mysqld enabled=yes state=started
 
-- name: add MySQL work user
-  mysql_user: name=dbuser password=dbpassword1 host={{ item }} priv=*.*:ALL,GRANT state=present
-  with_items:
-    - "localhost"
-    - "%"
+#- name: add MySQL work user
+#  mysql_user: name=dbuser password=dbpassword1 host={{ item }} priv=*.*:ALL,GRANT state=present
+#  with_items:
+#    - "localhost"
+#    - "%"

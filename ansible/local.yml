@@ -8,8 +8,6 @@
 - name: deploy MySQL and configure the databases
   hosts: dbservers
   become: yes
-  vars:
-    src_dir: /usr/local/src
   roles:
     - mysql
 
@@ -17,7 +15,5 @@
   hosts: sora
   become: yes
   roles:
+    - sbt
     - sora
-
-#- name: Copy the code from repository
-#  git: repo={{ repository }} dest=/home/vagrant/repo1 accept_hostkey=yes

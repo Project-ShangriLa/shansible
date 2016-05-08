@@ -156,7 +156,7 @@ host_key_checking = False
 
 開発環境のサーバに```shansible/ansible```をコピーし、当該ディレクトリ上で以下のコマンドを実行してください。
 
-    ansible-playbook -i local local.yml -k
+    ansible-playbook -i local local.yml
 
 ## 構築されるリポジトリ
 
