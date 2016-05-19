@@ -1,7 +1,7 @@
 - name: download
   get_url: url=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm dest={{ src_dir }}/
 
-- name: localinstall
+- name: local install
   yum: name={{ src_dir }}/mysql57-community-release-el7-7.noarch.rpm state=present
 
 - name: install
@@ -9,6 +9,9 @@
 
 - name: replace my.cnf
   template: src=my.cnf.j2 dest=/etc/my.cnf mode=0644
+
+- name: create log directory
+  file: path=/var/log/mysql state=directory owner=mysql group=mysql mode=0764
 
 - name: start MySQL service
   service: name=mysqld enabled=yes state=started

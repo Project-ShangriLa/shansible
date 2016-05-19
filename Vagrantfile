@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
     vb.cpus = "2"
   end
 
-  config.vm.boot_timeout = 3600
+  config.vm.boot_timeout = 5400
 
   config.ssh.forward_agent = true
 
@@ -52,14 +52,22 @@ Vagrant.configure(2) do |config|
   SHELL
   config.vm.provision "reload"
 
-  # ShangliLa constructing
+  # temporary script until Vagrant version 1.8.2
   config.vm.provision "shell", inline: <<-SHELL
-    sudo sed -i -e "s/^#*host_key_checking.*/host_key_checking = False/" /etc/ansible/ansible.cfg
+    GALAXY=/usr/local/bin/ansible-galaxy
+    echo '#!/usr/bin/env bash
+    /usr/bin/ansible-galaxy "$@"
+    exit 0
+    ' | sudo tee $GALAXY
+    sudo chmod 0755 $GALAXY
+#    sudo sed -i -e "s/^#*host_key_checking.*/host_key_checking = False/" /etc/ansible/ansible.cfg
   SHELL
+  # ShangliLa constructing
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "/home/vagrant/ansible/local.yml"
     ansible.provisioning_path = "/home/vagrant/ansible"
     ansible.limit = "all"
+    ansible.install = true
     ansible.inventory_path = "/home/vagrant/ansible/local"
   end
 
