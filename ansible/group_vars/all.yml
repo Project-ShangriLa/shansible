@@ -1,2 +1,10 @@
 src_dir: /usr/local/src
 install_path: /usr/local
+
+# 開発するアプリケーションの配置場所
+application_dir: /home/vagrant/repositories
+
+# MySQL
+mysql_log_dir: /var/log/mysql
+mysql_root_password: root
+mysql_admin_password: admin

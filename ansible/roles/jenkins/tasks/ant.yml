@@ -1,0 +1,21 @@
+- name: download
+  get_url: |
+    url=http://ftp.tsukuba.wide.ad.jp/software/apache//ant/binaries/apache-ant-{{ ant_version }}-bin.tar.gz
+    dest={{ src_dir }}
+  tags: ant
+
+- name: unarchive the compressed Ant binaries
+  unarchive: "copy=no src={{ src_dir }}/apache-ant-{{ ant_version }}-bin.tar.gz dest=/usr/local creates=/usr/local/apache-ant-{{ ant_version }}"
+  tags: ant
+
+- name: update the symbolic link to the Ant install
+  file: "path=/usr/local/ant src=/usr/local/apache-ant-{{ ant_version }} state=link force=yes"
+  tags: ant  
+
+- name: create the symbolic link to the Ant binary
+  file: "path=/usr/local/bin/ant src=/usr/local/ant/bin/ant state=link"
+  tags: ant  
+
+- name: set ANT_HOME environment variable
+  lineinfile: dest=/etc/environment regexp='^ANT_HOME.*' line='ANT_HOME=/usr/local/ant' insertbefore='^PATH.*'
+  tags: ant

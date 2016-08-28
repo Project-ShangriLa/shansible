@@ -7,7 +7,7 @@ datadir = /var/lib/mysql
 tmpdir = /tmp
 port = 3306
 socket = /var/lib/mysql/mysql.sock
-character-set-server = utf8
+character-set-server = utf8mb4
 default-storage-engine = InnoDB
 explicit_defaults_for_timestamp = 1
 default_password_lifetime = 0
@@ -53,28 +53,28 @@ innodb_commit_concurrency = 4
  
 # log
 general_log = 0
-general_log_file = /var/log/mysql/general.log
+general_log_file = {{ mysql_log_dir }}/general.log
 slow_query_log = 0
-log-error = /var/log/mysql/mysqld.log
+log-error = {{ mysql_log_dir }}/mysqld.log
 pid-file = /var/run/mysqld/mysqld.pid
 
 [client]
 port = 3306
 socket = /var/lib/mysql/mysql.sock
-default-character-set = utf8
+default-character-set = utf8mb4
  
 [mysql]
 show-warnings
 #safe-updates
 prompt = '[\d] mysql> '
-default-character-set = utf8
+default-character-set = utf8mb4
 
 [mysqldump]
 #max_allowed_packet = 16M
 quick
 set-charset
 single-transaction
-default-character-set = utf8
+default-character-set = utf8mb4
 
 
 !includedir /etc/my.cnf.d

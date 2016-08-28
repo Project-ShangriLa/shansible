@@ -7,13 +7,12 @@
     - openssl-devel 
     - zlib-devel
     - perl-ExtUtils-MakeMaker
+  tags: common
  
 - name: git install
-  vars:
-    git_version: 2.8.2
   include: git.yml
+  tags: common
 
 - name: java install
-  vars:
-    java_version: 1.8.0
   include: java.yml
+  tags: common

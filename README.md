@@ -15,6 +15,7 @@ CentOS 7の仮想OS上に、ShangriLaプロジェクトのローカル開発環�
 ホストOSには40GB以上のディスク領域が必要です。
 - https://atlas.hashicorp.com/centos/boxes/7
 
+
 ## 動作説明
 
 Provisioningで以下のAnsible Playbookが実行されます。  
@@ -33,8 +34,8 @@ Provisioningで以下のAnsible Playbookが実行されます。
 
 ### ソフトウェア
 
-- Vagrant 1.8+
-- VirtualBox 5+
+- Vagrant 1.8.4
+- VirtualBox 5.0.X
 
 ### Vagrantプラグイン
 
@@ -130,9 +131,15 @@ remote_path = remote_path.gsub(/^[a-zA-Z]:/, "")
 
     $ vagrant up
 
-ゲストOS起動後に、rsyncの自動同期を行う場合は、以下のコマンドをホストOSで実行してください。
+rsyncの自動同期を行う場合は、ゲストOS起動後に以下のコマンドをホストOSで実行してください。
 
     $ vagrant rsync-auto
+
+
+### 実行時間
+
+すべてのタスクが完了するまで、約1時間ほどかかります。  
+
 
 # ShangriLa Ansible Playbook
 
@@ -140,32 +147,81 @@ ShangriLaの実行環境を構築する、AnsibleのPlaybookです。
 
     shansible/ansible
 
+
 ## 実行要求
 
 Vagrant以外から実行する場合は、実行環境にAnsible 2.0+ をインストールしてください。
 
-また、```/etc/ansible/ansible.cfg```のhost_key_checkingをアンコメントし、
-host_key_checkingをFalseに変更して、SSH時のknown_hostsチェックを無効にしてください。
 
+### Ansible 2.1.0を使う場合の注意
+
+Ansible 2.1.0ではunarchiveモジュールにバグが有るため、本playbookでunarchiveを利用している箇所がエラーになります。
+回避するためには、以下のようにenvironmentを追加してください。
+
+```yml
+# TODO:environmentはAnsible2.1.0のバグ回避用
+- name: unarchive the compressed Ant binaries
+  unarchive: "copy=no src={{ src_dir }}/apache-ant-{{ ant_version }}-bin.tar.gz dest=/usr/local creates=/usr/local/apache-ant-{{ ant_version }}"
+  environment:
+    LANG: "C"
+    LC_ALL: "C"
+    LC_MESSAGES: "C"
+  tags: ant
 ```
-host_key_checking = False
-```
 
 
-## ローカル環境の構築手順
+## 開発環境の構築手順
 
 開発環境のサーバに```shansible/ansible```をコピーし、当該ディレクトリ上で以下のコマンドを実行してください。
 
-    ansible-playbook -i local local.yml
+    ansible-playbook -i local site.yml
 
-※SSHのagent forwardingを使ってgit cloneしているので、予めssh-addで秘密鍵を登録しておいてください。
-vagrant sshしてからansible-playbookコマンドを叩きたい場合も、ホストOS側でssh-addの実行をお願いします。
+※SSHのagent forwardingを使ってgit cloneしているので、GitHubの秘密鍵がssh-addで登録されている必要があります。
+vagrant sshしてからansible-playbookコマンドを叩く場合も、ホストOS側でssh-addの実行をお願いします。
 
 
-## 構築されるリポジトリ
+## 環境の説明
+
+Playbookの実行により、以下がCentOS 7上に配置されます。
+
+- Jenkins 2系最新
+- MySQL 5.7
+- OpenJDK 1.8
+- sbt 最新
+- ant 1.9.7
+- git 2.9.3
+- ShangriLaプロジェクト関連のリポジトリ
+
+
+### ShangriLaプロジェクトのリポジトリ
+
+group_vars/all.ymlで定義されたapplication_dir配下（デフォルト：/home/vagrant/repositories）に、
+ShangriLaプロジェクトの以下のリポジトリが作成されます。
 
 - [sora-playframework-scala](https://github.com/Project-ShangriLa/sora-playframework-scala)
-
-## 実行するDDL
-
 - [shangrila](https://github.com/Project-ShangriLa/shangrila)
+
+shanagrilaのDDL/DMLを、MySQLのDB（anime_admin_development）に対して実行してください。
+
+
+### MySQL
+
+開発に利用するDBとして、anime_admin_developmentが作成されます。
+
+また、以下のユーザがMySQLに作成されます。
+
+| User   | Password  | Host      |
+| :----- | :-------- | :-------- |
+| root   | root      | localhost |
+| admin  | admin     | localhost, 127.0.0.1, % |
+
+初期設定されるパスワードは、group_vars/all.ymlの
+mysql_root_password、mysql_admin_passwordで定義されています。
+
+
+#### ログファイル
+
+MySQLのログファイルは、以下のディレクトリに配置されます。（group_vars/all.ymlの変数で設定）
+
+    mysql_log_dir: /var/log/mysql
+

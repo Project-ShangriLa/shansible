@@ -1,8 +1,11 @@
 - name: download
   get_url: url=https://bintray.com/sbt/rpm/rpm dest={{ src_dir }}/
+  tags: sbt
 
 - name: add yum.repos.d
   copy: src={{ src_dir }}/bintray--sbt-rpm.repo dest=/etc/yum.repos.d/bintray-sbt-rpm.repo force=no
+  tags: sbt
 
 - name: install
   yum: name=sbt state=present
+  tags: sbt

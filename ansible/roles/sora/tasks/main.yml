@@ -1,2 +1,3 @@
 - name: git clone sora-playframework-scala
-  git: repo=git@github.com:Project-ShangriLa/sora-playframework-scala.git dest=/home/vagrant/repositories/sora-playframework-scala accept_hostkey=yes
+  git: repo=git@github.com:Project-ShangriLa/sora-playframework-scala.git dest={{ application_dir }}/sora-playframework-scala accept_hostkey=yes
+  tags: sora

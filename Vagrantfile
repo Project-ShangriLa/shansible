@@ -27,10 +27,10 @@ Vagrant.configure(2) do |config|
   # type: "rsync"
   config.vm.synced_folder "ansible", "/home/vagrant/ansible",
     :owner => 'vagrant', :group => 'vagrant',
-    :mount_options => ['dmode=755', 'fmode=644']
+    :mount_options => ['dmode=755', 'fmode=744']
   config.vm.synced_folder "repositories", "/home/vagrant/repositories",
     :create => 'true', :owner => 'vagrant', :group => 'vagrant',
-    :mount_options => ['dmode=755', 'fmode=644']
+    :mount_options => ['dmode=755', 'fmode=744']
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
@@ -52,16 +52,6 @@ Vagrant.configure(2) do |config|
   SHELL
   config.vm.provision "reload"
 
-  # temporary script until Vagrant version 1.8.2
-  config.vm.provision "shell", inline: <<-SHELL
-    GALAXY=/usr/local/bin/ansible-galaxy
-    echo '#!/usr/bin/env bash
-    /usr/bin/ansible-galaxy "$@"
-    exit 0
-    ' | sudo tee $GALAXY
-    sudo chmod 0755 $GALAXY
-#    sudo sed -i -e "s/^#*host_key_checking.*/host_key_checking = False/" /etc/ansible/ansible.cfg
-  SHELL
   # ShangliLa constructing
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "/home/vagrant/ansible/local.yml"
