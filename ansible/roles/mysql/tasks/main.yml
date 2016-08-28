@@ -1,0 +1,55 @@
+- name: download
+  get_url: url=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm dest={{ src_dir }}/
+  tags: mysql
+
+- name: local install
+  yum: name={{ src_dir }}/mysql57-community-release-el7-7.noarch.rpm state=present
+  tags: mysql
+
+- name: install
+  yum: name=mysql-community-server state=present
+  tags: mysql
+
+- name: create log directory
+  file: path={{ mysql_log_dir }} state=directory owner=mysql group=mysql mode=0764
+  tags: mysql
+
+- name: replace my.cnf
+  template: src=my.cnf.j2 dest=/etc/my.cnf mode=0644
+  tags: mysql
+
+- name: start MySQL service
+  service: name=mysqld enabled=yes state=started
+  tags: mysql
+
+- name: get temporary root password
+  shell: cat {{ mysql_log_dir }}/mysqld.log | grep 'password is generated' | awk '{print $11}'
+  register: mysql_default_password
+  tags: mysql
+
+- name: install MySQL-python module for ansible
+  yum: name=MySQL-python state=present
+  tags: mysql
+
+- name: check .my.cnf exists
+  stat: path=/root/.my.cnf
+  register: mycnf_file
+  tags: mysql
+
+- name: deploy my.cnf for root user
+  template: src=root.my.cnf.j2 dest=/root/.my.cnf mode=0600
+  when: not mycnf_file.stat.exists
+  tags: mysql
+
+- name: change password validation to the easy way
+  shell: |
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=4;"
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
+  when: not mycnf_file.stat.exists and stage == "development"
+  tags: mysql
+
+- name: change root user password
+  shell: |
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  when: not mycnf_file.stat.exists
+  tags: mysql

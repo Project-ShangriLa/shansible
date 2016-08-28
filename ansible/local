@@ -1,5 +1,19 @@
-[test]
-dev-shangrila
+localhost ansible_ssh_pass=vagrant ansible_ssh_common_args="-o ForwardAgent=yes"
 
-#[dbservers]
-#localhost
+[centos]
+localhost
+
+[ciservers]
+localhost
+
+[dbservers]
+localhost
+
+[sora]
+localhost
+
+[local:children]
+centos
+ciservers
+dbservers
+sora

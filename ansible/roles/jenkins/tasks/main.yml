@@ -1,0 +1,33 @@
+- name: install dependent packages
+  yum: name={{ item }} state=present
+  with_items:
+    - java-1.8.0-openjdk
+    - java-1.8.0-openjdk-devel
+  tags:
+    - jenkins
+
+- name: install ant task
+  include: ant.yml
+  tags: 
+    - jenkins
+
+- name: add jenkins.repo
+  get_url: url=http://pkg.jenkins.io/redhat-stable/jenkins.repo dest=/etc/yum.repos.d
+  tags: 
+    - jenkins
+
+- name: jenkins key import
+  rpm_key: state=present key=http://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  tags: 
+    - jenkins
+
+- name: install jenkins
+  yum: name=jenkins state=present
+  tags: 
+    - jenkins
+  notify: restart jenkins
+
+- name: ensure jenkins is running (and enable it at boot)
+  service: name=jenkins state=started enabled=yes
+  tags:
+    - jenkins

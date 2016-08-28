@@ -1,0 +1,18 @@
+- name: package install
+  yum: pkg={{ item }} state=latest
+  with_items:
+    - curl-devel
+    - expat-devel
+    - gettext-devel
+    - openssl-devel 
+    - zlib-devel
+    - perl-ExtUtils-MakeMaker
+  tags: common
+ 
+- name: git install
+  include: git.yml
+  tags: common
+
+- name: java install
+  include: java.yml
+  tags: common

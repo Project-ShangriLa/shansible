@@ -1,0 +1,32 @@
+- name: CentOSへのミドルウェアインストール
+  hosts: centos
+  become: yes
+  gather_facts: no
+  roles:
+    - common
+    - sbt
+
+- name: install CI server
+  hosts: centos
+  become: yes
+  roles:
+    - jenkins
+
+- name: deploy MySQL and configure the databases
+  hosts: dbservers
+  become: yes
+  roles:
+    - mysql
+    - mysql/anime_admin_development
+
+- name: deploy ShangriLa DDL/DML
+  hosts: dbservers
+  become: no
+  roles:
+    - shangrila
+
+- name: deploy sora
+  hosts: sora
+  become: no
+  roles:
+    - sora

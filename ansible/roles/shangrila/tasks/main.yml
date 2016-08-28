@@ -1,0 +1,3 @@
+- name: git clone shangrila
+  git: repo=git@github.com:Project-ShangriLa/shangrila.git dest={{ application_dir }}/shangrila accept_hostkey=yes
+  tags: shangrila
