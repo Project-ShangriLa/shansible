@@ -45,7 +45,7 @@
   shell: |
     mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=4;"
     mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
-  when: not mycnf_file.stat.exists
+  when: not mycnf_file.stat.exists and stage == "development"
   tags: mysql
 
 - name: change root user password
