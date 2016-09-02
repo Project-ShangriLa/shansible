@@ -1,5 +1,6 @@
 src_dir: /usr/local/src
 install_path: /usr/local
+command_path: /usr/local/bin
 
 # 開発するアプリケーションの配置場所
 application_dir: /home/vagrant/repositories
@@ -8,6 +9,7 @@ application_dir: /home/vagrant/repositories
 git_version: 2.9.3
 java_version: 1.8.0
 ant_version: 1.9.7
+flyway_version: 4.0.3
 
 # MySQL
 mysql_log_dir: /var/log/mysql

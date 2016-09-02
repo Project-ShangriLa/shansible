@@ -1,3 +1,9 @@
 - name: git clone shangrila
   git: repo=git@github.com:Project-ShangriLa/shangrila.git dest={{ application_dir }}/shangrila accept_hostkey=yes
   tags: shangrila
+
+- name: migrate shangrila DDL/DML
+  shell: flyway -locations=filesystem:{{ application_dir }}/shangrila/flyway-migration/{{ db_name }} migrate
+  tags:
+    - shangrila
+    - shangrila_migration
