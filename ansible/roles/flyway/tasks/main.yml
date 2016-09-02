@@ -1,0 +1,29 @@
+- name: download flyway
+  get_url: url=https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{{ flyway_version }}/flyway-commandline-{{ flyway_version }}.tar.gz dest={{ src_dir }}/
+  tags: flyway
+
+- name: unarchive flyway
+  unarchive: src={{ src_dir }}/flyway-commandline-{{ flyway_version }}.tar.gz dest={{ install_path }}
+  tags: flyway
+
+- name: flyway for everyone (chmod 755)
+  file: path={{ install_path }}/flyway-{{ flyway_version }}/flyway mode=0755
+  when: stage == "development"
+  tags: flyway
+
+- name: update the symbolic link to the flyway install
+  file: path={{ install_path }}/flyway src={{ install_path }}/flyway-{{ flyway_version }} state=link force=yes
+  tags: flyway
+
+- name: create the symbolic link to the flyway binary
+  file: path={{ command_path }}/flyway src={{ install_path }}/flyway/flyway state=link
+  tags: flyway
+
+- name: deploy flyway.conf
+  template: src=flyway.conf.j2 dest={{ install_path }}/flyway/conf/flyway.conf mode=0600
+  tags: flyway
+
+- name: view flyway.conf for developer (chmod 644)
+  file: path={{ install_path }}/flyway/conf/flyway.conf mode=0644
+  when: stage == "development"
+  tags: flyway
