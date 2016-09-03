@@ -1,0 +1,57 @@
+- name: install readline-devel
+  yum: name=readline-devel state=present
+  become: yes
+  tags: ruby
+
+- name: git clone rbenv
+  git: repo=git@github.com:rbenv/rbenv.git dest=~/.rbenv accept_hostkey=yes
+  tags: ruby
+
+- name: git clone ruby-build
+  git: repo=git@github.com:rbenv/ruby-build.git dest=~/.rbenv/plugins/ruby-build accept_hostkey=yes
+  tags: ruby
+
+- name: configure rbenv
+  shell: |
+    cd ~/.rbenv && src/configure && make -C src
+  ignore_errors: True
+  tags: ruby
+
+- name: set rbenv PATH
+  lineinfile: dest=~/.bash_profile regexp='.*rbenv/bin.*' line='export PATH="$HOME/.rbenv/bin:$PATH"' insertafter='export PATH'
+  tags: ruby
+
+- name: set rbenv init
+  lineinfile: dest=~/.bash_profile regexp='.*rbenv\sinit.*' line='eval "$(rbenv init -)"' insertafter='export PATH="$HOME/.rbenv/bin:$PATH"'
+  tags: ruby
+
+- name: install rbenv
+  shell: source ~/.bash_profile
+  tags: ruby
+
+- name: check the installation of ruby
+  shell: bash -lc "rbenv versions"
+  register: ruby_install
+  tags: ruby
+
+- name: install ruby
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  when: '"{{ ruby_version }}" not in ruby_install.stdout'
+  tags: ruby
+
+- name: set ruby global
+  shell: bash -lc "rbenv global {{ ruby_version }}"
+  tags: ruby
+
+- name: install rails
+  shell: bash -lc "gem install rails"
+  tags:
+    - ruby
+    - rails
+
+- name: install sqlite-devel
+  yum: name=sqlite-devel state=present
+  become: yes
+  tags:
+    - ruby
+    - rails
