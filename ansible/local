@@ -12,8 +12,12 @@ localhost
 [sora]
 localhost
 
+[railsservers]
+localhost
+
 [local:children]
 centos
 ciservers
 dbservers
 sora
+railsservers

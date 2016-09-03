@@ -31,3 +31,9 @@
   become: no
   roles:
     - sora
+
+- name: setup rails server
+  hosts: railsservers
+  become: no
+  roles:
+    - ruby

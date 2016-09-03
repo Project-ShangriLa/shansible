@@ -190,6 +190,8 @@ Playbookの実行により、以下がCentOS 7上に配置されます。
 - sbt 最新
 - ant 1.9.7
 - git 2.9.3
+- ruby 2.3.1
+- rails 5
 - ShangriLaプロジェクト関連のリポジトリ
 
 
