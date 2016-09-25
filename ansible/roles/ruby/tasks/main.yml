@@ -32,6 +32,7 @@
 - name: check the installation of ruby
   shell: bash -lc "rbenv versions"
   register: ruby_install
+  ignore_errors: True
   tags: ruby
 
 - name: install ruby
