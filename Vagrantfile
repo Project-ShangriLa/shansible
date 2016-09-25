@@ -54,7 +54,7 @@ Vagrant.configure(2) do |config|
 
   # ShangliLa constructing
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "/home/vagrant/ansible/local.yml"
+    ansible.playbook = "/home/vagrant/ansible/site.yml"
     ansible.provisioning_path = "/home/vagrant/ansible"
     ansible.limit = "all"
     ansible.install = true
